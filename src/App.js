@@ -1,6 +1,8 @@
 import { header, edges, nodes } from "./graph-definition";
+import { useQueryParam, ArrayParam } from "use-query-params";
 import GraphRenderer from "./graph-renderer";
-import React, { useState } from "react";
+import includes from "lodash/fp/includes";
+import React from "react";
 import styles from "./App.module.css";
 
 const nodeRegex = /([\s\S]*?) \[label="([\s\S]*?)"/;
@@ -11,12 +13,12 @@ const checkboxes = nodes.sort().map(node => {
 });
 
 const App = () => {
-  const [checkedItems, setCheckedItems] = useState(new Set());
+  const [checkedItems, setCheckedItems] = useQueryParam("a", ArrayParam);
 
   const handleChange = event => {
     const clonedSet = new Set(checkedItems);
     clonedSet[event.target.checked ? "add" : "delete"](event.target.name);
-    setCheckedItems(clonedSet);
+    setCheckedItems([...clonedSet]);
   };
 
   return (
@@ -26,7 +28,7 @@ const App = () => {
           <div key={item.value}>
             <label>
               <input
-                checked={checkedItems.has(item.value)}
+                checked={includes(item.value)(checkedItems)}
                 name={item.value}
                 onChange={handleChange}
                 type="checkbox"
@@ -41,7 +43,7 @@ const App = () => {
           edges,
           header,
           nodes,
-          nodesToShow: [...checkedItems]
+          nodesToShow: checkedItems
         }}
       />
     </div>

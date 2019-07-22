@@ -1,0 +1,4 @@
+- Legend
+- Canvas should shrink/grow to fit nodes
+- "All" button?
+- Figure out if theres a connection via some other stuff.

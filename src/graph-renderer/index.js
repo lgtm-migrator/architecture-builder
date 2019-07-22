@@ -6,6 +6,7 @@ import Viz from "viz.js";
 
 const viz = new Viz({ Module, render });
 
+// TODO: Bug in here where SALES and BUGSNAG are selected. Time for some tests, and maybe typescript
 const filterItems = ({ items, relevantIndices, splitter, nodesToShow }) =>
   items.filter(itemString => {
     const splitItem = split(splitter)(itemString);
@@ -39,10 +40,8 @@ const GraphRenderer = ({ header, edges, nodes, nodesToShow }) => {
 
   viz
     .renderString(allItems.map(subarray => subarray.join("\n")).join(""))
-    .then((string) => {setSvgHtml(string); console.log(string)})
-    .catch(error => {
-      console.error(error);
-    });
+    .then(setSvgHtml)
+    .catch(console.error);
 
   if (!svgHtml) {
     return <div>Rendering</div>;
