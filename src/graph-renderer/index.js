@@ -10,7 +10,7 @@ const filterItems = ({ items, relevantIndices, splitter, nodesToShow }) =>
   items.filter(itemString => {
     const splitItem = split(splitter)(itemString);
     const relevantParts = splitItem.filter((part, index) =>
-      includes(index)(relevantIndices)
+      includes(index, relevantIndices)
     );
     return relevantParts.every(relevantPart =>
       includes(relevantPart, nodesToShow)
@@ -36,7 +36,7 @@ const GraphRenderer = ({ header, edges, nodes, nodesToShow }) => {
     }),
     ["}"]
   ]);
-  console.log(allItems)
+
   viz
     .renderString(allItems.map(subarray => subarray.join("\n")).join(""))
     .then((string) => {setSvgHtml(string); console.log(string)})

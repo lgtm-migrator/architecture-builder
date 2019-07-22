@@ -1,8 +1,5 @@
 import { header, edges, nodes } from "./graph-definition";
 import GraphRenderer from "./graph-renderer";
-import keys from "lodash/fp/keys";
-import pickBy from "lodash/fp/pickBy";
-// import map from "lodash/fp/map";
 import React, { useState } from "react";
 import styles from "./App.module.css";
 
@@ -13,20 +10,13 @@ const checkboxes = nodes.sort().map(node => {
   return { value, name };
 });
 
-// const initialState = Object.assign(
-//   {},
-//   ...map(({ value }) => ({ [value]: true }))(checkboxes)
-// );
-// console.log(initialState);
-
 const App = () => {
-  const [checkedItems, setCheckedItems] = useState({API: true, WHICS_WS: true, WHICS: true});
+  const [checkedItems, setCheckedItems] = useState(new Set());
 
   const handleChange = event => {
-    setCheckedItems({
-      ...checkedItems,
-      [event.target.name]: event.target.checked
-    });
+    const clonedSet = new Set(checkedItems);
+    clonedSet[event.target.checked ? "add" : "delete"](event.target.name);
+    setCheckedItems(clonedSet);
   };
 
   return (
@@ -36,7 +26,7 @@ const App = () => {
           <div key={item.value}>
             <label>
               <input
-                checked={checkedItems[item.value] || false}
+                checked={checkedItems.has(item.value)}
                 name={item.value}
                 onChange={handleChange}
                 type="checkbox"
@@ -51,7 +41,7 @@ const App = () => {
           edges,
           header,
           nodes,
-          nodesToShow: keys(pickBy(checkedItems))
+          nodesToShow: [...checkedItems]
         }}
       />
     </div>
