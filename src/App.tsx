@@ -7,24 +7,30 @@ import styles from "./App.module.css";
 
 const nodeRegex = /([\s\S]*?) \[label="([\s\S]*?)"/;
 
-const checkboxes = nodes.sort().map(node => {
-  const [original, value, name] = node.match(nodeRegex);
+const checkboxes = nodes.sort().map((node: string) => {
+  const matches = node.match(nodeRegex);
+  if (!matches) {
+    throw new Error("Node should be parse-able");
+  }
+  const [, value, name] = matches;
   return { value, name };
 });
 
 const App = () => {
   const [checkedItems, setCheckedItems] = useQueryParam("a", ArrayParam);
 
-  const handleChange = event => {
+  const handleChange = (event: {
+    target: { checked: boolean; name: string };
+  }) => {
     const clonedSet = new Set(checkedItems);
     clonedSet[event.target.checked ? "add" : "delete"](event.target.name);
-    setCheckedItems([...clonedSet]);
+    setCheckedItems(Array.from(clonedSet));
   };
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.sidebar}>
-        {checkboxes.map(item => (
+        {checkboxes.map((item: { value: string; name: string }) => (
           <div key={item.value}>
             <label>
               <input
@@ -43,7 +49,7 @@ const App = () => {
           edges,
           header,
           nodes,
-          nodesToShow: checkedItems
+          nodesToShow: checkedItems || []
         }}
       />
     </div>
