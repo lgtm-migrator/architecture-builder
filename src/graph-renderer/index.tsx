@@ -1,69 +1,57 @@
+import _ from "lodash";
 import { Module, render } from "viz.js/full.render.js";
-import includes from "lodash/fp/includes";
+import edgeToDot from "./utils/edge-to-dot";
+import GraphEdge from "../types/GraphEdge";
+import GraphNode from "../types/GraphNode";
+import map from "lodash/fp/map";
+import nodeToDot from "./utils/node-to-dot";
 import React, { useState } from "react";
-import split from "lodash/fp/split";
 import Viz from "viz.js";
 
 const viz = new Viz({ Module, render });
 
-const filterItems = ({
-  items,
-  nodesToShow,
-  relevantIndices,
-  splitter
-}: {
-  items: string[];
-  nodesToShow: string[];
-  relevantIndices: number[];
-  splitter: RegExp;
-}) =>
-  items.filter((item: string) =>
-    split(splitter, item)
-      .filter((part: string, index: number) => includes(index, relevantIndices))
-      .every((relevantPart: string) => includes(relevantPart, nodesToShow))
+const newLine = "\n";
+
+const removeExplicitDimensions = (svgString: string) =>
+  _.replace(
+    svgString,
+    /width="(.*?)" height="(.*?)"/,
+    'width="100%" height="100%"'
   );
 
 const GraphRenderer = ({
   header,
   edges,
-  nodes,
-  nodesToShow
+  nodes
 }: {
   header: string[];
-  edges: string[];
-  nodes: string[];
-  nodesToShow: string[];
+  edges: GraphEdge[];
+  nodes: GraphNode[];
 }) => {
-  const [svgHtml, setSvgHtml] = useState("");
+  const [svgString, setSvgString] = useState("");
 
   const allItems: string[][] = [
     header,
-    filterItems({
-      items: edges,
-      nodesToShow,
-      relevantIndices: [0, 2],
-      splitter: /( -> | \[)/
-    }),
-    filterItems({
-      items: nodes,
-      nodesToShow,
-      relevantIndices: [0],
-      splitter: / \[/
-    }),
+    map(edgeToDot, edges),
+    map(nodeToDot, nodes),
     ["}"]
   ];
 
   viz
     .renderString(
-      allItems.map((subarray: string[]) => subarray.join("\n")).join("\n")
+      allItems.map((subarray: string[]) => subarray.join(newLine)).join(newLine)
     )
-    .then(setSvgHtml)
+    .then(setSvgString)
     .catch(console.error);
 
-  if (!svgHtml) {
+  if (!svgString) {
     return <div>Rendering</div>;
   }
 
-  return <div dangerouslySetInnerHTML={{ __html: svgHtml }} />;
+  return (
+    <div
+      dangerouslySetInnerHTML={{ __html: removeExplicitDimensions(svgString) }}
+    />
+  );
 };
 export default GraphRenderer;
