@@ -3,4 +3,4 @@ type CheckBox = {
   name: string;
 };
 
-export default CheckBox
+export default CheckBox;

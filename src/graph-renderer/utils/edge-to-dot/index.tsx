@@ -1,10 +1,11 @@
-import GraphEdge from "../../../types/GraphEdge";
+import GraphEdge from '../../../types/GraphEdge';
 import rgbHex from 'rgb-hex';
 
 const getColorPart = (edge: GraphEdge) =>
   Math.min((Math.log(edge.minutesBetweenData) / Math.log(1440)) * 255, 230);
 
-const edgeToDot = (edge: GraphEdge) => '"' +
+const edgeToDot = (edge: GraphEdge) =>
+  '"' +
   edge.from +
   '" -> "' +
   edge.to +
@@ -12,4 +13,4 @@ const edgeToDot = (edge: GraphEdge) => '"' +
   rgbHex(getColorPart(edge), getColorPart(edge), getColorPart(edge)) +
   '"]';
 
-export default edgeToDot
+export default edgeToDot;

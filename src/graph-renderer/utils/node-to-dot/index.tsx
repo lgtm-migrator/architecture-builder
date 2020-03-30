@@ -1,5 +1,5 @@
-import GraphNode from "../../../types/GraphNode";
-const mapWithKeys = require("lodash/fp/map").convert({ cap: false });
+import GraphNode from '../../../types/GraphNode';
+import { map } from 'lodash';
 
 const nodeToDot = (node: GraphNode) =>
   '"' +
@@ -7,12 +7,12 @@ const nodeToDot = (node: GraphNode) =>
   '" [ label ="' +
   [
     node.name,
-    ...mapWithKeys(
-      (value: string, key: string) => key + ": " + value,
-      node.descriptionItems
-    )
-  ].join("|") +
-  (node.url ? '" href="' + node.url : "") +
+    ...map(
+      node.descriptionItems,
+      (value: string, key: string) => key + ': ' + value
+    ),
+  ].join('|') +
+  (node.url ? '" href="' + node.url : '') +
   '" shape="record' +
   '"]';
 

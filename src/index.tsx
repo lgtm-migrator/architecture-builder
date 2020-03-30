@@ -1,12 +1,7 @@
+import { filter, includes, map, sortBy, toLower } from 'lodash';
 import { useQueryParam, ArrayParam } from 'use-query-params';
-import filter from 'lodash/fp/filter';
-import flow from 'lodash/fp/flow';
-import includes from 'lodash/fp/includes';
-import map from 'lodash/fp/map';
 import React from 'react';
-import sortBy from 'lodash/fp/sortBy';
 import styled from 'styled-components';
-import toLower from 'lodash/fp/toLower';
 
 import CheckBox from './types/CheckBox';
 import GraphEdge from './types/GraphEdge';
@@ -41,13 +36,17 @@ const header = [
   'outputorder="edgesfirst"',
 ];
 
-const filterNodes = (checkedItems: string[] | undefined) =>
-  filter((node: GraphNode) => includes(node.id, checkedItems));
+const filterNodes = (graphNode: GraphNode[]) => (
+  checkedItems: string[] | undefined
+) => filter(graphNode, (node: GraphNode) => includes(checkedItems, node.id));
 
-const filterEdges = (checkedItems: string[] | undefined) =>
+const filterEdges = (graphEdge: GraphEdge[]) => (
+  checkedItems: string[] | undefined
+) =>
   filter(
+    graphEdge,
     (edge: GraphEdge) =>
-      includes(edge.from, checkedItems) && includes(edge.to, checkedItems)
+      includes(checkedItems, edge.from) && includes(checkedItems, edge.to)
   );
 
 export const ArchitectureBuilder = ({
@@ -57,10 +56,10 @@ export const ArchitectureBuilder = ({
   edges: GraphEdge[];
   nodes: GraphNode[];
 }) => {
-  const checkBoxes: CheckBox[] = flow(
-    map((node: GraphNode) => ({ value: node.id, name: node.name })),
-    sortBy((node: CheckBox) => toLower(node.name))
-  )(nodes);
+  const checkBoxes: CheckBox[] = sortBy(
+    map(nodes, (node: GraphNode) => ({ value: node.id, name: node.name })),
+    (node: CheckBox) => toLower(node.name)
+  );
   const [checkedItems, setCheckedItems] = useQueryParam('a', ArrayParam);
 
   const handleChange = (event: {
@@ -71,23 +70,19 @@ export const ArchitectureBuilder = ({
     setCheckedItems(Array.from(clonedSet));
   };
 
-  const handleSelectAll = () => setCheckedItems(map('value', checkBoxes));
+  const handleSelectAll = () => setCheckedItems(map(checkBoxes, 'value'));
   const handleClear = () => setCheckedItems([]);
 
   return (
     <Wrapper>
       <Sidebar>
-        <Button onClick={handleSelectAll}>
-          Select all
-        </Button>
-        <Button onClick={handleClear}>
-          Clear
-        </Button>
+        <Button onClick={handleSelectAll}>Select all</Button>
+        <Button onClick={handleClear}>Clear</Button>
         {checkBoxes.map((item: CheckBox) => (
           <div key={item.value}>
             <label>
               <input
-                checked={includes(item.value)(checkedItems)}
+                checked={includes(checkedItems, item.value)}
                 name={item.value}
                 onChange={handleChange}
                 type="checkbox"
@@ -99,9 +94,9 @@ export const ArchitectureBuilder = ({
       </Sidebar>
       <GraphRenderer
         {...{
-          edges: filterEdges(checkedItems)(edges),
+          edges: filterEdges(edges)(checkedItems),
           header,
-          nodes: filterNodes(checkedItems)(nodes),
+          nodes: filterNodes(nodes)(checkedItems),
         }}
       />
     </Wrapper>

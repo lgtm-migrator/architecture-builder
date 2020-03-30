@@ -1,19 +1,19 @@
-import _ from "lodash";
-import { Module, render } from "viz.js/full.render.js";
-import edgeToDot from "./utils/edge-to-dot";
-import GraphEdge from "../types/GraphEdge";
-import GraphNode from "../types/GraphNode";
-import map from "lodash/fp/map";
-import nodeToDot from "./utils/node-to-dot";
-import React, { useState } from "react";
-import Viz from "viz.js";
+import { Module, render } from 'viz.js/full.render.js';
+import { map, replace } from 'lodash';
+import React, { useState } from 'react';
+import Viz from 'viz.js';
+
+import edgeToDot from './utils/edge-to-dot';
+import GraphEdge from '../types/GraphEdge';
+import GraphNode from '../types/GraphNode';
+import nodeToDot from './utils/node-to-dot';
 
 const viz = new Viz({ Module, render });
 
-const newLine = "\n";
+const newLine = '\n';
 
 const removeExplicitDimensions = (svgString: string) =>
-  _.replace(
+  replace(
     svgString,
     /width="(.*?)" height="(.*?)"/,
     'width="100%" height="100%"'
@@ -22,19 +22,19 @@ const removeExplicitDimensions = (svgString: string) =>
 const GraphRenderer = ({
   header,
   edges,
-  nodes
+  nodes,
 }: {
   header: string[];
   edges: GraphEdge[];
   nodes: GraphNode[];
 }) => {
-  const [svgString, setSvgString] = useState("");
+  const [svgString, setSvgString] = useState('');
 
   const allItems: string[][] = [
     header,
-    map(edgeToDot, edges),
-    map(nodeToDot, nodes),
-    ["}"]
+    map(edges, edgeToDot),
+    map(nodes, nodeToDot),
+    ['}'],
   ];
 
   viz
