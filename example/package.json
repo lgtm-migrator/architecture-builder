@@ -12,8 +12,7 @@
     "lodash-es": "../node_modules/lodash",
     "react-dom": "../node_modules/react-dom/profiling",
     "react": "../node_modules/react",
-    "scheduler/tracing": "../node_modules/scheduler/tracing-profiling",
-    "use-query-params": "../node_modules/use-query-params"
+    "scheduler/tracing": "../node_modules/scheduler/tracing-profiling"
   },
   "devDependencies": {
     "@types/react": "16.9.26",
