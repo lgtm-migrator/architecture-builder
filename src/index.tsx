@@ -1,8 +1,8 @@
 import { filter, includes, map, sortBy, toLower } from 'lodash';
-import { useQueryParam, ArrayParam } from 'use-query-params';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
+import { buildInitialiseCheckedItemsFromQuery, buildUpdateQuery } from './query-string-management';
 import CheckBox from './types/CheckBox';
 import GraphEdge from './types/GraphEdge';
 import GraphNode from './types/GraphNode';
@@ -36,18 +36,22 @@ const header = [
   'outputorder="edgesfirst"',
 ];
 
-const filterNodes = (graphNode: GraphNode[]) => (
+const filterNodes = (graphNodes: GraphNode[]) => (
   checkedItems: string[] | undefined
-) => filter(graphNode, (node: GraphNode) => includes(checkedItems, node.id));
+) => filter(graphNodes, (node: GraphNode) => includes(checkedItems, node.id));
 
-const filterEdges = (graphEdge: GraphEdge[]) => (
+const filterEdges = (graphEdges: GraphEdge[]) => (
   checkedItems: string[] | undefined
 ) =>
   filter(
-    graphEdge,
+    graphEdges,
     (edge: GraphEdge) =>
       includes(checkedItems, edge.from) && includes(checkedItems, edge.to)
   );
+
+const emptyArray: string[] = [];
+
+const runHookOnce: [] = [];
 
 export const ArchitectureBuilder = ({
   edges,
@@ -60,7 +64,10 @@ export const ArchitectureBuilder = ({
     map(nodes, (node: GraphNode) => ({ value: node.id, name: node.name })),
     (node: CheckBox) => toLower(node.name)
   );
-  const [checkedItems, setCheckedItems] = useQueryParam('a', ArrayParam);
+
+  const [checkedItems, setCheckedItems] = useState(emptyArray);
+  useEffect(buildInitialiseCheckedItemsFromQuery(setCheckedItems), runHookOnce);
+  useEffect(buildUpdateQuery(checkedItems), [checkedItems]);
 
   const handleChange = (event: {
     target: { checked: boolean; name: string };
@@ -71,7 +78,7 @@ export const ArchitectureBuilder = ({
   };
 
   const handleSelectAll = () => setCheckedItems(map(checkBoxes, 'value'));
-  const handleClear = () => setCheckedItems([]);
+  const handleClear = () => setCheckedItems(emptyArray);
 
   return (
     <Wrapper>

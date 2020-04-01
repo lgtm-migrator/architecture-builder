@@ -52,11 +52,7 @@ const nodes = [
 ];
 
 const App = () => {
-  return (
-    <div>
-      <ArchitectureBuilder edges={edges} nodes={nodes} />
-    </div>
-  );
+  return <ArchitectureBuilder edges={edges} nodes={nodes} />;
 };
 
 ReactDOM.render(<App />, document.getElementById('root'));

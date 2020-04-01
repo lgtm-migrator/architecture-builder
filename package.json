@@ -48,8 +48,10 @@
   },
   "dependencies": {
     "@types/lodash": "^4.14.149",
+    "@types/query-string": "^6.3.0",
     "lodash": "^4.17.15",
     "lodash-es": "^4.17.15",
+    "query-string": "^6.11.1",
     "rgb-hex": "^3.0.0",
     "styled-components": "^5.0.1",
     "use-query-params": "^0.6.0",
