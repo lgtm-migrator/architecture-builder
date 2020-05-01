@@ -15,7 +15,8 @@
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "prepare": "npm run snyk-protect && tsdx build",
+    "snyk-protect": "snyk protect"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -55,11 +56,13 @@
     "rgb-hex": "^3.0.0",
     "styled-components": "^5.0.1",
     "use-query-params": "^0.6.0",
-    "viz.js": "^2.1.2"
+    "viz.js": "^2.1.2",
+    "snyk": "^1.316.1"
   },
   "renovate": {
     "extends": [
       "@ahmdigital"
     ]
-  }
+  },
+  "snyk": true
 }
