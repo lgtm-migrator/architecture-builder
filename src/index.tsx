@@ -2,7 +2,10 @@ import { filter, includes, map, sortBy, toLower } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { buildInitialiseCheckedItemsFromQuery, buildUpdateQuery } from './query-string-management';
+import {
+  buildInitialiseCheckedItemsFromQuery,
+  buildUpdateQuery,
+} from './query-string-management';
 import CheckBox from './types/CheckBox';
 import GraphEdge from './types/GraphEdge';
 import GraphNode from './types/GraphNode';
