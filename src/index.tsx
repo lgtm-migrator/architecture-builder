@@ -33,10 +33,9 @@ const Button = styled.button`
 
 const header = [
   'strict digraph SoftwareArchitecture {',
+  'concentrate="true";',
+  'outputorder="edgesfirst";',
   'overlap = false;',
-  'node [fontsize=16 fontname="Proxima Nova"];',
-  'rankdir="LR"',
-  'outputorder="edgesfirst"',
 ];
 
 const filterNodes = (graphNodes: GraphNode[]) => (
