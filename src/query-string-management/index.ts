@@ -5,9 +5,7 @@ const queryStringOptions: queryString.ParseOptions = {
   arrayFormat: 'comma',
 };
 
-export const buildUpdateQuery = (
-  checkedItems: string[]
-): React.EffectCallback => () => {
+export const buildUpdateQuery = (checkedItems: string[]): React.EffectCallback => () => {
   // eslint-disable-next-line no-restricted-globals
   location.hash = queryString.stringify(checkedItems, queryStringOptions);
 };

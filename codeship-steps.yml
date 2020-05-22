@@ -1,0 +1,7 @@
+- name: CI
+  type: parallel
+  service: build-service
+  steps:
+    - command: npm run build
+    - command: npm run lint
+    - command: npm run test

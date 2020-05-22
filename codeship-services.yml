@@ -1,0 +1,4 @@
+build-service:
+  build:
+    image: architecture-builder
+    dockerfile: Dockerfile

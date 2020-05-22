@@ -2,10 +2,7 @@ import { filter, includes, map, sortBy, toLower } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import {
-  buildInitialiseCheckedItemsFromQuery,
-  buildUpdateQuery,
-} from './query-string-management';
+import { buildInitialiseCheckedItemsFromQuery, buildUpdateQuery } from './query-string-management';
 import CheckBox from './types/CheckBox';
 import GraphEdge from './types/GraphEdge';
 import GraphNode from './types/GraphNode';
@@ -38,30 +35,17 @@ const header = [
   'overlap = false;',
 ];
 
-const filterNodes = (graphNodes: GraphNode[]) => (
-  checkedItems: string[] | undefined
-) => filter(graphNodes, (node: GraphNode) => includes(checkedItems, node.id));
+const filterNodes = (graphNodes: GraphNode[]) => (checkedItems: string[] | undefined) =>
+  filter(graphNodes, (node: GraphNode) => includes(checkedItems, node.id));
 
-const filterEdges = (graphEdges: GraphEdge[]) => (
-  checkedItems: string[] | undefined
-) =>
-  filter(
-    graphEdges,
-    (edge: GraphEdge) =>
-      includes(checkedItems, edge.from) && includes(checkedItems, edge.to)
-  );
+const filterEdges = (graphEdges: GraphEdge[]) => (checkedItems: string[] | undefined) =>
+  filter(graphEdges, (edge: GraphEdge) => includes(checkedItems, edge.from) && includes(checkedItems, edge.to));
 
 const emptyArray: string[] = [];
 
 const runHookOnce: [] = [];
 
-export const ArchitectureBuilder = ({
-  edges,
-  nodes,
-}: {
-  edges: GraphEdge[];
-  nodes: GraphNode[];
-}) => {
+export const ArchitectureBuilder = ({ edges, nodes }: { edges: GraphEdge[]; nodes: GraphNode[] }) => {
   const checkBoxes: CheckBox[] = sortBy(
     map(nodes, (node: GraphNode) => ({ value: node.id, name: node.name })),
     (node: CheckBox) => toLower(node.name)
@@ -71,9 +55,7 @@ export const ArchitectureBuilder = ({
   useEffect(buildInitialiseCheckedItemsFromQuery(setCheckedItems), runHookOnce);
   useEffect(buildUpdateQuery(checkedItems), [checkedItems]);
 
-  const handleChange = (event: {
-    target: { checked: boolean; name: string };
-  }) => {
+  const handleChange = (event: { target: { checked: boolean; name: string } }) => {
     const clonedSet = new Set(checkedItems);
     clonedSet[event.target.checked ? 'add' : 'delete'](event.target.name);
     setCheckedItems(Array.from(clonedSet));
