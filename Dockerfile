@@ -1,4 +1,4 @@
-FROM node:10.20.1
+FROM node:14.3.0
 
 WORKDIR /root
 RUN mkdir -p /root/build
