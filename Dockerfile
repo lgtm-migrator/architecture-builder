@@ -1,13 +1,12 @@
-FROM node:14.11.0
+FROM node:lts
 
-WORKDIR /root
-RUN mkdir -p /root/build
+WORKDIR /root/app
 
-COPY tsconfig.json /root
-COPY package.json /root
-COPY package-lock.json /root
+RUN npm i -g npm@latest
+COPY package.json package-lock.json ./
+RUN npm ci --quiet --no-optional && \
+  npm cache clean --force
 
-RUN npm i --quiet
-
-COPY test /root/test
-COPY src /root/src
+COPY tsconfig.json ./
+COPY test ./test
+COPY src ./src

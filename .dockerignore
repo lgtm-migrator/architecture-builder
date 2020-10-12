@@ -7,3 +7,9 @@ codeship-services.yml
 codeship-steps.yml
 coverage
 node_modules
+codeship_deploy_key*
+codeship.env
+.dockerignore
+Dockerfile
+codeship*
+*.encrypted

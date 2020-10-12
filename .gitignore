@@ -6,3 +6,5 @@ dist
 example/.cache
 *.decrypted
 *.aes
+codeship_deploy_key*
+codeship.env
