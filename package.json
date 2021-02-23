@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "file-saver": "2.0.5",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "lodash-es": "^4.17.15",
     "query-string": "^6.12.1",
     "rgb-hex": "^3.0.0",
