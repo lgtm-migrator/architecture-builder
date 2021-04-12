@@ -35,7 +35,7 @@
   "author": "Cameron Chamberlain",
   "module": "dist/architecture-builder.esm.js",
   "devDependencies": {
-    "@types/file-saver": "2.0.1",
+    "@types/file-saver": "2.0.2",
     "@types/jest": "26.0.22",
     "@types/lodash": "4.14.168",
     "@types/query-string": "6.3.0",
