@@ -25,6 +25,7 @@ const Button = styled.button`
   display: block;
   width: 100%;
   min-height: 2rem;
+  margin-top: 1rem;
   margin-bottom: 1rem;
 `;
 
@@ -43,7 +44,7 @@ const filterEdges = (graphEdges: GraphEdge[]) => (checkedItems: string[] | undef
 
 const emptyArray: string[] = [];
 
-const runHookOnce: [] = [];
+const runHookOnce: unknown[] = [];
 
 export const ArchitectureBuilder = ({ edges, nodes }: { edges: GraphEdge[]; nodes: GraphNode[] }) => {
   const checkBoxes: CheckBox[] = sortBy(
@@ -51,6 +52,7 @@ export const ArchitectureBuilder = ({ edges, nodes }: { edges: GraphEdge[]; node
     (node: CheckBox) => toLower(node.name)
   );
 
+  const [showDetail, setShowDetail] = useState(false);
   const [checkedItems, setCheckedItems] = useState(emptyArray);
   useEffect(buildInitialiseCheckedItemsFromQuery(setCheckedItems), runHookOnce);
   useEffect(buildUpdateQuery(checkedItems), [checkedItems]);
@@ -67,6 +69,18 @@ export const ArchitectureBuilder = ({ edges, nodes }: { edges: GraphEdge[]; node
   return (
     <Wrapper>
       <Sidebar>
+        <div>
+          <label>
+            <input
+              checked={showDetail}
+              name="show-detail"
+              onChange={() => setShowDetail(!showDetail)}
+              type="checkbox"
+            />
+            Show detail?
+          </label>
+        </div>
+
         <Button onClick={handleSelectAll}>Select all</Button>
         <Button onClick={handleClear}>Clear</Button>
         {checkBoxes.map((item: CheckBox) => (
@@ -88,6 +102,7 @@ export const ArchitectureBuilder = ({ edges, nodes }: { edges: GraphEdge[]; node
           edges: filterEdges(edges)(checkedItems),
           header,
           nodes: filterNodes(nodes)(checkedItems),
+          showDetail,
         }}
       />
     </Wrapper>

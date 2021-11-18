@@ -17,6 +17,7 @@ const edges = [
     minutesBetweenData: 0.1,
     from: 'SANITY_BACKEND',
     to: 'WEBSITE',
+    description: "uses 'GraphQL'"
   },
 ];
 

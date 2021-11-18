@@ -1,6 +1,7 @@
 interface GraphEdge {
-  minutesBetweenData: number;
+  description?: string;
   from: string;
+  minutesBetweenData: number;
   to: string;
 }
 
